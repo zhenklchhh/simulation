@@ -11,10 +11,10 @@ public class ConsoleLog {
         this.simulation = simulation;
     }
     public void printInfoAboutSimulation(){
-        System.out.println("Ход: " + simulation.turnCount);
-        java.util.Map<Class<? extends Entity>, Integer> entityInstenseCounts = simulation.getMap().getEntityCounts();
-        System.out.println("Количество хищников: " + entityInstenseCounts.get(Predator.class));
-        System.out.println("Количество травоядных: " + entityInstenseCounts.get(Herbivore.class));
-        System.out.println("Количество травы: " + entityInstenseCounts.get(Grass.class) + "\n");
+        Map map = simulation.getMap();
+        System.out.println("Ход: " + simulation.turnCount);;
+        System.out.println("Количество хищников: " + map.getEntityCounts(Predator.class));
+        System.out.println("Количество травоядных: " + map.getEntityCounts(Herbivore.class));
+        System.out.println("Количество травы: " + map.getEntityCounts(Grass.class));
     }
 }

@@ -3,15 +3,15 @@ package program.Actions;
 import program.Entities.Grass;
 import program.Map;
 
-public class ReplanishGrass extends ReplanishAction {
-    public ReplanishGrass(Map map) {
+public class MapReplanishGrass extends MapReplanishAction {
+    public MapReplanishGrass(Map map) {
         super(map);
         this.minimumEntityAmount = (map.height * map.width) / 20;
     }
 
     @Override
-    public int getEntityInstenseCounts() {
-        return map.getEntityCounts().get(Grass.class);
+    public int getNumberOfEntity() {
+        return map.getEntityCounts(Grass.class);
     }
 
     @Override

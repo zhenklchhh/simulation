@@ -5,22 +5,17 @@ import program.Entities.Grass;
 import program.Map;
 
 public class Herbivore extends Creature {
-    public Herbivore(){
-        this.health = 1;
-    }
     public Herbivore(Coordinates coordinates) {
         super(coordinates);
-        this.health = 1;
-    }
-    public boolean isEaten(){
-        return health == 0;
+        this.setHealth(1);
+        this.setSpeed(1);
     }
     @Override
     public void makeMove(Map map) {
         CreatureNavigator creatureNavigator = new CreatureNavigator(map);
-        Coordinates nearGrassCoordinates = creatureNavigator.findNearestEntityCoordinates(this.coordinates,
-                Grass.class.getSimpleName());
-        map.moveEntity(this, creatureNavigator.findOptimalNextCoordinates(this.coordinates,
-                nearGrassCoordinates));
+        Coordinates nearGrassCoordinates = creatureNavigator.findNearestEntityCoordinates(this.getCoordinates(),
+                Grass.class.getSimpleName(), this.getSpeed());
+        map.moveEntity(this, creatureNavigator.findOptimalNextCoordinates(this.getCoordinates(),
+                nearGrassCoordinates, this.getSpeed()));
     }
 }

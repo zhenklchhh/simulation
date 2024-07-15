@@ -10,15 +10,14 @@ import java.util.Queue;
 
 public class CreatureNavigator {
     private Map map;
-    private int AMOUNT_OF_DIRECTIONS = 8;
     public CreatureNavigator(Map map) {
         this.map = map;
     }
-    public Coordinates findOptimalNextCoordinates(Coordinates currentCoordinates, Coordinates targetCoordinates){
+    public Coordinates findOptimalNextCoordinates(Coordinates currentCoordinates, Coordinates targetCoordinates, int speed){
         int dx = targetCoordinates.x - currentCoordinates.x;
         int dy = targetCoordinates.y - currentCoordinates.y;
-        int moveX = Integer.compare(dx, 0);
-        int moveY = Integer.compare(dy, 0);
+        int moveX = Integer.compare(dx, 0) * speed;
+        int moveY = Integer.compare(dy, 0) * speed;
         Coordinates nextCoordinates = new Coordinates(currentCoordinates.x + moveX,
                 currentCoordinates.y + moveY);
         if(nextCoordinates.equals(targetCoordinates)){
@@ -36,7 +35,7 @@ public class CreatureNavigator {
         }
         return nextCoordinates;
     }
-    public Coordinates findNearestEntityCoordinates(Coordinates currentCoordinates, String entityClassName){
+    public Coordinates findNearestEntityCoordinates(Coordinates currentCoordinates, String entityClassName, int speed){
         Coordinates resultCoordinates = null;
         Queue<Coordinates> queue = new LinkedList<>();
         queue.add(currentCoordinates);
@@ -48,7 +47,7 @@ public class CreatureNavigator {
                     resultCoordinates = coordinates;
                     break;
                 }
-                ArrayList<Coordinates> nearCoordinates = map.getNearCoordinates(coordinates);
+                ArrayList<Coordinates> nearCoordinates = map.getNearCoordinates(coordinates, speed);
                 for(Coordinates nearCoordinate : nearCoordinates){
                     queue.add(nearCoordinate);
                 }

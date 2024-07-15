@@ -62,7 +62,7 @@ public class Simulation {
         initActions.add(new SpawnPredator(map));
         initActions.add(new SpawnTree(map));
         turnActions.add(new MoveAllCreaturesAction(map));
-        turnActions.add(new ReplanishGrass(map));
-        turnActions.add(new ReplanishHerbivore(map));
+        turnActions.add(new MapReplanishGrass(map));
+        turnActions.add(new MapReplanishHerbivore(map));
     }
 }

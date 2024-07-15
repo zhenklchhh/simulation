@@ -12,7 +12,7 @@ public class MoveAllCreaturesAction extends Action {
     @Override
     public void performAction() {
         for(Creature creature : map.getAllCreatures()){
-            if(creature.health != 0){
+            if(!creature.isDead()){
                 creature.makeMove(map);
             }
         }

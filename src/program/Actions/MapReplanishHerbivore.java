@@ -3,8 +3,8 @@ package program.Actions;
 import program.Entities.Creatures.Herbivore;
 import program.Map;
 
-public class ReplanishHerbivore extends ReplanishAction{
-    public ReplanishHerbivore(Map map) {
+public class MapReplanishHerbivore extends MapReplanishAction {
+    public MapReplanishHerbivore(Map map) {
         super(map);
         this.minimumEntityAmount = (map.height * map.width) / 50;
     }
@@ -16,7 +16,7 @@ public class ReplanishHerbivore extends ReplanishAction{
     }
 
     @Override
-    public int getEntityInstenseCounts() {
-        return map.getEntityCounts().get(Herbivore.class);
+    public int getNumberOfEntity() {
+        return map.getEntityCounts(Herbivore.class);
     }
 }

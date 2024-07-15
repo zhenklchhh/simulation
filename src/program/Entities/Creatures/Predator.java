@@ -5,20 +5,18 @@ import program.Coordinates;
 import program.Map;
 
 public class Predator extends Creature {
-    public Predator(){
-        this.health = 2;
-    }
     public Predator(Coordinates coordinates) {
         super(coordinates);
-        this.health = 2;
+        this.setHealth(1);
+        this.setSpeed(1);
     }
     @Override
     public void makeMove(Map map) {
         CreatureNavigator creatureNavigator = new CreatureNavigator(map);
-        Coordinates nearHerbivoreCoordinates = creatureNavigator.findNearestEntityCoordinates(this.coordinates,
-                Herbivore.class.getSimpleName());
-        map.moveEntity(this, creatureNavigator.findOptimalNextCoordinates(this.coordinates,
-                nearHerbivoreCoordinates));
+        Coordinates nearHerbivoreCoordinates = creatureNavigator.findNearestEntityCoordinates(this.getCoordinates(),
+                Herbivore.class.getSimpleName(), this.getSpeed());
+        map.moveEntity(this, creatureNavigator.findOptimalNextCoordinates(this.getCoordinates(),
+                nearHerbivoreCoordinates, this.getSpeed()));
     }
 
 }

@@ -16,17 +16,17 @@ public class Map {
     public int width;
     public int height;
     private HashMap<Coordinates, Entity> entities = new HashMap<>();
-    private java.util.Map<Class<? extends Entity>, Integer> entityIntenseCounts = new HashMap<>();
+    private java.util.Map<Class<? extends Entity>, Integer> entitiesCounter = new HashMap<>();
     public Map(int width, int height){
         this.width = width;
         this.height = height;
-        entityIntenseCounts.putAll(java.util.Map.of(Grass.class, 0, Rock.class, 0, Tree.class, 0,
+        entitiesCounter.putAll(java.util.Map.of(Grass.class, 0, Rock.class, 0, Tree.class, 0,
                 Predator.class, 0, Herbivore.class, 0));
     }
     public void addEntity(Entity entity){
         Class<? extends Entity> entityType = entity.getClass();
-        entityIntenseCounts.put(entityType, entityIntenseCounts.get(entityType) + 1);
-        entities.put(entity.coordinates, entity);
+        entitiesCounter.put(entityType, entitiesCounter.get(entityType) + 1);
+        entities.put(entity.getCoordinates(), entity);
     }
     public boolean hasEntityAtCoordinates(Coordinates coordinates){
         return entities.containsKey(coordinates);
@@ -43,19 +43,19 @@ public class Map {
     public void removeEntity(Coordinates coordinates){
         Entity entity = this.getEntity(coordinates);
         if(entity instanceof Herbivore){
-            ((Herbivore) entity).health = 0;
+            ((Herbivore) entity).setHealth(Creature.DEAD_STATE_HP);
         }
         Class<? extends Entity> entityType = entity.getClass();
-        entityIntenseCounts.put(entityType, entityIntenseCounts.get(entityType) - 1);
+        entitiesCounter.put(entityType, entitiesCounter.get(entityType) - 1);
         entities.remove(coordinates);
     }
     public void moveEntity(Entity entity, Coordinates newCoordinates){
-        entities.remove(entity.coordinates);
+        entities.remove(entity.getCoordinates());
         entities.put(newCoordinates, entity);
-        entity.coordinates = newCoordinates;
+        entity.setCoordinates(newCoordinates);
     }
-    public java.util.Map<Class<? extends Entity>, Integer> getEntityCounts(){
-        return entityIntenseCounts;
+    public int getEntityCounts(Class<? extends Entity> entityClass){
+        return entitiesCounter.get(entityClass);
     }
     public Entity getEntity(Coordinates coordinates){
         return entities.get(coordinates);
@@ -69,32 +69,21 @@ public class Map {
         }
         return creatures;
     }
-    public ArrayList<Coordinates> getNearCoordinates(Coordinates coordinates){
+    public ArrayList<Coordinates> getNearCoordinates(Coordinates coordinates, int range){
         ArrayList<Coordinates> nearCoordinates = new ArrayList<>();
-        if(coordinates.x > 0){
-            nearCoordinates.add(new Coordinates(coordinates.x - 1, coordinates.y));
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) {
+                    continue;
+                }
+                int newX = coordinates.x + dx * range;
+                int newY = coordinates.y + dy * range;
+                if (newX >= 0 && newX < this.width && newY >= 0 && newY < this.height) {
+                    nearCoordinates.add(new Coordinates(newX, newY));
+                }
+            }
         }
-        if(coordinates.y > 0){
-            nearCoordinates.add(new Coordinates(coordinates.x, coordinates.y - 1));
-        }
-        if(coordinates.x > 0 && coordinates.y > 0){
-            nearCoordinates.add(new Coordinates(coordinates.x - 1, coordinates.y - 1));
-        }
-        if(coordinates.x < this.width - 1){
-            nearCoordinates.add(new Coordinates(coordinates.x + 1, coordinates.y));
-        }
-        if(coordinates.y < this.height - 1){
-            nearCoordinates.add(new Coordinates(coordinates.x, coordinates.y + 1));
-        }
-        if(coordinates.x < this.width - 1 && coordinates.y < this.height - 1){
-            nearCoordinates.add(new Coordinates(coordinates.x + 1, coordinates.y + 1));
-        }
-        if(coordinates.x > 0 && coordinates.y < this.height - 1){
-            nearCoordinates.add(new Coordinates(coordinates.x - 1, coordinates.y + 1));
-        }
-        if(coordinates.x < this.width - 1 && coordinates.y > 0){
-            nearCoordinates.add(new Coordinates(coordinates.x + 1, coordinates.y - 1));
-        }
+
         return nearCoordinates;
     }
 }
